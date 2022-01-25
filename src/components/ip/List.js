@@ -3,6 +3,7 @@ import "../../App.css";
 import { colors } from "../../data";
 import Table from "../_base/Table";
 import Button from "../_base/Button";
+import { Link } from "react-router-dom";
 
 const List = () => {
   return (
@@ -12,20 +13,12 @@ const List = () => {
       </div>
       <div className="row">
         <div className="col button-container">
-          <Button
-            className={`btn-primary`}
-            cb={() => {
-              console.log("test");
-            }}
-            text={`Add`}
-          />
-         <Button
-            className={`btn-primary ms-2`}
-            cb={() => {
-              console.log("test");
-            }}
-            text={`Audit logs`}
-          />
+          <Link className="btn btn-primary" to={`/ip/add`}>
+            Add
+          </Link>
+          <Link className="btn btn-primary ms-2" to={`/ip/add`}>
+            Audit logs
+          </Link>
         </div>
       </div>
     </>

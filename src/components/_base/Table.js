@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Table({ colors }) {
   return (
@@ -20,7 +21,7 @@ function Table({ colors }) {
                 <td>{c.color}</td>
                 <td>{c.value}</td>
                 <td>
-                  <a href="">Edit</a>
+                  <Link to="/ip/edit">Edit</Link>
                 </td>
               </tr>
             );
