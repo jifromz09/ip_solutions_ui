@@ -3,7 +3,7 @@ import React from "react";
 function Table({ colors }) {
   return (
     <>
-      <table class="table table-striped">
+      <table className="table table-striped">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -15,7 +15,7 @@ function Table({ colors }) {
         <tbody>
           {colors.map((c, i) => {
             return (
-              <tr>
+              <tr key={i}>
                 <th scope="row">{c.id}</th>
                 <td>{c.color}</td>
                 <td>{c.value}</td>
