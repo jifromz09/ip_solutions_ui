@@ -1,12 +1,43 @@
-html, body, #root {
+ 
+
+.Wrapper {
+   
+  position: absolute;
+  top: 0;
+  left: 0; 
+  right: 0;
+  bottom: 0;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background-color: #eeeeee;
+}
+
+.navbar {
+  padding: 0rem!important;
+  padding-bottom: 0rem!important;
+  background-color:#00b8d4!important;
+  width: 100%;
+}
+
+.container{
   height: 100%;
+  background-color: #fff;
+  padding: 0%;
 }
 
-.Home {
-  padding: 20px 0;
+.list-container {
+  width: 100%;
+  padding: 0 5px 0 5px;
 }
 
-.form-label{
+.loader-container {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+ 
+.form-label {
   margin-bottom: 0.5rem;
 }
 
@@ -14,10 +45,28 @@ html, body, #root {
   padding: 5px 0px;
 }
 
-.btn-primary {
- margin-top: 10px;
+.btn-primary, .btn-secondary {
+  width: 4.5rem;
 }
 
+.btn-edit, .btn-add {
+  background-color: #0097a7;
+}
+
+.btn-logs {
+  background-color: #c62828;
+}
+
+.spinner-border {
+  border-left-color: #0097a7;
+  border-top-color: #0097a7;
+  border-bottom-color: #0097a7;
+}
+ 
+.btn {
+  color: #fff;
+}
+ 
 #header {
   background-color: #212121;
   padding: 0px;
@@ -26,23 +75,28 @@ html, body, #root {
   align-items: center;
 }
 
-.list-group-item{
-  border-radius: 0%!important;
+.list-group-item {
+  border-radius: 0% !important;
 }
 
-h1{
-  
+h1 {
   font-weight: 500;
   line-height: 1.2;
   text-align: center;
- }
+}
 
- .h1, h1 {
-  font-size: 2.0rem!important;
+
+.table {
+ margin-bottom: 0%;
+}
+
+.h1,
+h1 {
+  font-size: 2rem !important;
 }
 
 .button-container {
-  padding: 0px;
+   padding: 15px 0 15px 0;
 }
 
 .login-container {
@@ -55,6 +109,26 @@ h1{
   margin-left: 30px;
 }
 
+.btn {
+  vertical-align: 0%;
+  margin: 0px 2px 0px 2px;
+}
+
+.action-container, .thead-action {
+  text-align: center;
+}
+
+
+.d-flex {
+  flex-direction: column;
+  text-align: center;
+}
+
+.loader {
+  font-size: 14px;
+  font-weight: 600;
+}
+
 .bg-image-vertical {
   position: relative;
   overflow: hidden;
@@ -63,28 +137,26 @@ h1{
   background-size: auto 100%;
 }
 
-@media (min-width: 1200px)
-{
+@media (min-width: 1200px) {
   .container {
     max-width: 1140px;
   }
 }
 
-
-@media (min-width: 1200px){
+@media (min-width: 1200px) {
   .container {
     max-width: 720px;
   }
 }
 
-@media (min-width: 576px){
+@media (min-width: 576px) {
   .container {
     max-width: 540px;
   }
 }
 
-@media (min-width: 992px){
-  .container {
+@media (min-width: 992px) {
+  .container{
     max-width: 960px;
   }
 }

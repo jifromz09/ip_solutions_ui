@@ -54,7 +54,7 @@ const Register = () => {
             </div>
 
             <p className="small mb-5 pb-lg-2">
-              <Link to="/login" className="text-muted">
+              <Link to="/" className="text-muted">
                 Back to login
               </Link>
             </p>

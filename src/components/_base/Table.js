@@ -1,35 +1,51 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import { UPDATE_IP } from "../../constants/RouteConstants";
 
-function Table({ colors }) {
+const tableHeaders = ["Id", "IP Address", "Label", "Action"];
+
+const Table = ({ ipAdds }) => {
   return (
     <>
       <table className="table table-striped">
         <thead>
           <tr>
-            <th scope="col">#</th>
-            <th scope="col">IP Address</th>
-            <th scope="col">Label</th>
-            <th scope="col">Action</th>
+            {tableHeaders.map((thead, i) => {
+              return (
+                <th
+                  className={`${thead === "Action" ? "thead-action" : ""}`}
+                  scope="col"
+                  key={thead}
+                >
+                  {thead}
+                </th>
+              );
+            })}
           </tr>
         </thead>
         <tbody>
-          {colors.map((c, i) => {
-            return (
-              <tr key={i}>
-                <th scope="row">{c.id}</th>
-                <td>{c.color}</td>
-                <td>{c.value}</td>
-                <td>
-                  <Link to="/ip/edit">Edit</Link>
-                </td>
-              </tr>
-            );
-          })}
+          {ipAdds &&
+            ipAdds.map((item, i) => {
+              return (
+                <tr key={i}>
+                  <th scope="row">{item.id}</th>
+                  <td>{item.ip_address}</td>
+                  <td>{item.label}</td>
+                  <td className="action-container">
+                    <Link className="btn btn-sm btn-edit" to={UPDATE_IP}>
+                      Edit
+                    </Link>
+                    <Link className="btn btn-sm btn-logs" to={UPDATE_IP}>
+                      Logs
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
         </tbody>
       </table>
     </>
   );
-}
+};
 
 export default Table;

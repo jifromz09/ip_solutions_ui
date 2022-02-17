@@ -1,35 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../_base/Button";
 import { Link } from "react-router-dom";
+import { ADDRESSES } from "../../constants/RouteConstants";
+import TextInput from "../_base/TextInput";
 
 const Add = () => {
+  const [ipAddress, setIpAddress] = useState("");
+
+  const onTextChange = (e) => {
+    const { value } = e.target;
+    setIpAddress((prevState) => (prevState = value));
+  };
+
   return (
-    <>
-      <div className="row">
-        <div className="col">
-          <div className="input-group mb-3">
-            <input type="text" className="form-control" placeholder="IP" />
-          </div>
-          <div className="input-group mb-3">
-            <input type="text" className="form-control" placeholder="Label" />
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col button-container">
-          <Button
-            className={`btn-primary ms-3`}
-            cb={() => {
-              console.log("test");
-            }}
-            text={`Save`}
+    <div className="row g-0">
+      <div className="col p-4">
+       
+        <div className="input-group mb-3">
+          <TextInput
+            className={`form-control`}
+            value={ipAddress}
+            cb={onTextChange}
+            ph={`IP Address`}
           />
-          <Link className="btn btn-secondary ms-2" to={`/ip/list`}>
-            Back to list
-          </Link>
         </div>
+        <div className="input-group mb-3">
+          <input type="text" className="form-control" placeholder="Label" />
+        </div>
+        <Button
+          className={`btn-primary btn-sm`}
+          cb={() => {
+            console.log("test");
+          }}
+          text={`Save`}
+        />
+        <Link className="btn btn-secondary ms-2 btn-sm" to={ADDRESSES}>
+          Back
+        </Link>
       </div>
-    </>
+    </div>
   );
 };
 

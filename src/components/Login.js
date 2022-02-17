@@ -34,7 +34,7 @@ const Login = () => {
 
           <div className="pt-1 mb-4">
             <Link className="btn btn-info btn-lg btn-block"
-            to="/list"
+            to="/ipaddress"
             >Login</Link>
           </div>
 
