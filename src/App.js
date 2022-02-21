@@ -1,11 +1,8 @@
+import React, { lazy, Suspense } from "react";
 import "./App.css";
-import Login from "../src/components/Login";
-import Register from "../src/components/Register";
-import Main from "./components/Main";
 import { Route, Routes } from "react-router-dom";
-import AddNewIP from "./components/ip/AddNewIP";
-import Edit from "../src/components/ip/Edit";
-import List from "../src/components/ip/List";
+import PrivateRouteWrapper from "./components/Route/PrivateRouteWrapper";
+import Loader from "./components/_base/Loader";
 
 import {
   SAVE_IP,
@@ -14,19 +11,41 @@ import {
   REGISTER,
   ADDRESSES,
 } from "../src/constants/RouteConstants";
+import storage from "./config";
+
+const Login = lazy(() => import("./components/Login"));
+const Register = lazy(() => import("./components/Register"));
+const Edit = lazy(() => import("./components/ip/Edit"));
+const List = lazy(() => import("./components/ip/List"));
+const Main = lazy(() => import("./components/Main"));
+const AddNewIP = lazy(() => import("./components/ip/AddNewIP"));
+const NotFound = lazy(() => import("./components/NotFound"));
 
 const App = () => {
+  const isAuthenticated = storage.isLoggedIn();
+ 
   return (
     <>
-      <Routes>
-        <Route path={LOGIN} element={<Login />} />
-        <Route path={ADDRESSES} element={<Main />}>
-          <Route path={ADDRESSES} element={<List />} />
-          <Route path={SAVE_IP} element={<AddNewIP />} />
-          <Route path={UPDATE_IP} element={<Edit />} />
-        </Route>
-        <Route path={REGISTER} element={<Register />} />
-      </Routes>
+      <Suspense fallback={<Loader />}>
+        <Routes>
+          <Route path={LOGIN} element={<Login />} />
+          <Route path={ADDRESSES} element={<Main />}>
+            <Route path={ADDRESSES} element={<List />} />
+            <Route path={SAVE_IP} element={
+              <PrivateRouteWrapper isAuthenticated={isAuthenticated} redirectTo={LOGIN}>
+                <AddNewIP />
+              </PrivateRouteWrapper>
+            } />
+            <Route path={UPDATE_IP} element={
+              <PrivateRouteWrapper isAuthenticated={isAuthenticated} redirectTo={LOGIN}>
+                <Edit />
+              </PrivateRouteWrapper>
+            } />
+          </Route>
+          <Route path={REGISTER} element={<Register />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </Suspense>
     </>
   );
 };

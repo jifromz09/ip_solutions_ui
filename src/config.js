@@ -26,6 +26,6 @@ storage.isLoggedIn = () => {
   return isEmpty(storage.getItem("access_token")) ? false : true;
 };
 
-console.log(storage);
+ 
 
 export default storage;

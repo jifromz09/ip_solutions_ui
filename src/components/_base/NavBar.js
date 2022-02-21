@@ -1,15 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { ADDRESSES, REGISTER, LOGIN } from "../../constants/RouteConstants";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import storage from "../../config";
- 
+import { logout } from "../../data/api";
+import { authSuccessTimeeOut, hideErrorAlert } from "../../Helpers";
+import Cookies from "js-cookie";
 
 const NavBar = () => {
-  const [name, setName] = useState(storage.getItem("name"));
-  const [isLoggedIn, settIsLoggedIn] = useState(storage.isLoggedIn());
+  const name = storage.getItem("name");
+  const isLoggedIn = storage.isLoggedIn();
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertClassName, setAlertClassName] = useState("alert-danger");
+  const navigate = useNavigate();
+
   useEffect(() => {
-    console.log(storage.isLoggedIn());
+    return () => {
+      clearTimeout(hideErrorAlert);
+      clearTimeout(authSuccessTimeeOut);
+    };
   }, []);
+
+  const onLogoutUser = async () => {
+    await logout()
+      .then((res) => {
+        console.log(res);
+        const { message } = res.data;
+        storage.clear();
+        Cookies.remove("token");
+        setResponseResult(message, "alert-success");
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const setResponseResult = (message, className) => {
+    setAlertClassName((prevState) => (prevState = className));
+    setAlertMessage((prevState) => (prevState = message));
+    setShowErrorAlert((prevState) => (prevState = true));
+    hideErrorAlert(setShowErrorAlert);
+    authSuccessTimeeOut(navigate, LOGIN);
+  };
+
   return (
     <nav className="navbar navbar-light bg-light">
       <div className="container-fluid">
@@ -18,7 +51,6 @@ const NavBar = () => {
             IP Management Solutions
           </strong>
         </Link>
-
         <ul className="nav justify-content-center">
           {isLoggedIn && (
             <li className="nav-item">
@@ -46,10 +78,19 @@ const NavBar = () => {
                       {`${name}!`}
                     </strong>
                   </div>
-                  <div className="col d-flex justify-content-start">                    
-                      <strong style={{ color: "#ffffff", fontSize: "12px", cursor: "pointer" }}>
-                        {`Logout`}
-                      </strong>                   
+                  <div className="col d-flex justify-content-start">
+                    <strong
+                      style={{
+                        color: "#ffffff",
+                        fontSize: "12px",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => {
+                        onLogoutUser();
+                      }}
+                    >
+                      {`Logout`}
+                    </strong>
                   </div>
                 </div>
               </div>
@@ -64,18 +105,9 @@ const NavBar = () => {
               </Link>
             </li>
           )}
+          
           {!isLoggedIn && (
-            <li className="nav-item">
-              <a class="navbar-brand" href="#">
-                <img src="/guest.png" width="30" height="30" alt="" />
-              </a>
-              <strong style={{ color: "#ffffff", fontSize: "12px" }}>
-                {`Guest`}
-              </strong>
-            </li>
-          )}
-          {!isLoggedIn && (
-            <li className="nav-item">
+            <li className="nav-item px-2">
               <Link className="navbar-brand" to={LOGIN}>
                 <strong style={{ color: "#ffffff", fontSize: "12px" }}>
                   Login

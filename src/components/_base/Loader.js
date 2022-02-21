@@ -1,6 +1,6 @@
 import React from "react";
 
-const Loader = ({caption}) => {
+const Loader = ({ caption, show = false }) => {
   return (
     <>
       <div className="d-flex align-items-center row">
@@ -9,7 +9,7 @@ const Loader = ({caption}) => {
           role="status"
           aria-hidden="true"
         />
-        {/* <span className="loader">{`${caption}`}</span> */}
+        {show && <span className="loader" style={{color: "#00b8d4"}}>{`${caption}`}</span>}
       </div>
     </>
   );

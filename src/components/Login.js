@@ -5,14 +5,16 @@ import TextInput from "./_base/TextInput";
 import Layout from "./Layout/Layout";
 import storage from "../config";
 import Cookies from "js-cookie";
-import { authHeader, hideErrorAlert, authSuccessTimeeOut } from "../Helpers";
-import { login } from "../data/api";
-import { REGISTER } from "../constants/RouteConstants";
+import { hideErrorAlert, authSuccessTimeeOut } from "../Helpers";
+import { login, authHeader } from "../data/api";
+import { ADDRESSES, REGISTER } from "../constants/RouteConstants";
 import axios from "axios";
 import Alert from "../../src/components/_base/Alert";
+import Loader from "../components/_base/Loader";
 
 const EMAIL_REQUIRED = "Email is required!";
 const PASSWORD_REQUIRED = "Password is required!";
+const LOADER_CAPTION = "Logging in....";
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
@@ -22,7 +24,7 @@ const Login = () => {
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(EMAIL_REQUIRED);
   const [alertClassName, setAlertClassName] = useState("alert-danger");
-
+ 
   useEffect(() => {
     return () => {
       clearTimeout(hideErrorAlert);
@@ -59,14 +61,13 @@ const Login = () => {
     await login({ email, password })
       .then((res) => {
         const { access_token, name } = res.data.data;
-        const { message } = res.data;
         storage.setAccessToken(JSON.stringify(access_token));
         storage.setName(name);
         storage.setTokenExpiry(Date.now() + 86400000);
         Cookies.set("token", access_token);
         axios.defaults.headers = authHeader();
         setLoading((prevState) => !prevState);
-        setResponseResult(message, "alert-success");
+        authSuccessTimeeOut(navigate, ADDRESSES);
       })
       .catch((err) => {
         const { data, status } = err.response;
@@ -85,61 +86,60 @@ const Login = () => {
     setAlertMessage((prevState) => (prevState = message));
     setShowErrorAlert((prevState) => (prevState = true));
     hideErrorAlert(setShowErrorAlert);
-    authSuccessTimeeOut(navigate);
   };
 
   return (
     <Layout>
       <div className="container">
         <div className="row justify-content-center align-items-center h-100">
-          <form style={{ width: "23rem" }}>
-            <h1
-              className="fw-normal mb-3 pb-3"
-              style={{ letterSpacing: "1px", color: "#0097a7" }}
-            >
-              Log in
-            </h1>
+            <form style={{ width: "23rem" }}>
+              <h1
+                className="fw-normal mb-3 pb-3"
+                style={{ letterSpacing: "1px", color: "#0097a7" }}
+              >
+                Log in
+              </h1>
+              <div className="form-outline mb-4">
+                <TextInput
+                  type="email"
+                  className="form-control"
+                  value={email}
+                  cb={onEmailTextChange}
+                  ph={`Email`}
+                />
+              </div>
 
-            <div className="form-outline mb-4">
-              <TextInput
-                type="email"
-                className="form-control"
-                value={email}
-                cb={onEmailTextChange}
-                ph={`Email`}
-              />
-            </div>
+              <div className="form-outline mb-4">
+                <TextInput
+                  type="password"
+                  className="form-control"
+                  value={password}
+                  cb={onPasswordTextChange}
+                  ph={`Password`}
+                />
+              </div>
 
-            <div className="form-outline mb-4">
-              <TextInput
-                type="password"
-                className="form-control"
-                value={password}
-                cb={onPasswordTextChange}
-                ph={`Password`}
+              <div className="pt-1 mb-4">
+                <Button
+                  className={`btn btn-add btn-sm btn-block`}
+                  text={`Login`}
+                  cb={userLogin}
+                  disabled={loading}
+                />
+                <Button
+                  className={`btn btn-add btn-sm btn-block ml`}
+                  text={`Register`}
+                  cb={() => navigate(REGISTER)}
+                  disabled={loading}
+                />
+              </div>
+              <Alert
+                message={alertMessage}
+                showErrorAlert={showErrorAlert}
+                className={alertClassName}
               />
-            </div>
-
-            <div className="pt-1 mb-4">
-              <Button
-                className={`btn btn-add btn-sm btn-block`}
-                text={`Login`}
-                cb={userLogin}    
-                disabled={loading}           
-              />
-              <Button
-                className={`btn btn-add btn-sm btn-block ml`}
-                text={`Register`}
-                cb={() => navigate(REGISTER)}  
-                disabled={loading}                
-              />
-            </div>
-            <Alert
-              message={alertMessage}
-              showErrorAlert={showErrorAlert}
-              className={alertClassName}
-            />
-          </form>
+            </form>
+          
         </div>
       </div>
     </Layout>

@@ -5,19 +5,21 @@ import TextInput from "./_base/TextInput";
 import Layout from "./Layout/Layout";
 import storage from "../config";
 import Cookies from "js-cookie";
-import { authHeader, hideErrorAlert, authSuccessTimeeOut } from "../Helpers";
-import { register } from "../data/api";
-import { LOGIN } from "../constants/RouteConstants";
+import { hideErrorAlert, authSuccessTimeeOut } from "../Helpers";
+import { register, authHeader } from "../data/api";
+import { ADDRESSES, LOGIN } from "../constants/RouteConstants";
 import axios from "axios";
 import Alert from "../../src/components/_base/Alert";
+import Loader from "../components/_base/Loader";
 
 const EMAIL_REQUIRED = "Email is required!";
 const PASSWORD_REQUIRED = "Password is required!";
 const RETYPE_PASSWORD_REQUIRED = "Password did not match!";
 const NAME_REQUIRED = "Name is required!";
+const LOADER_CAPTION = "Processing....";
 
 const Register = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -87,14 +89,13 @@ const Register = () => {
     await register({ email, password, password_confirmation, name })
       .then((res) => {
         const { access_token, name } = res.data.data;
-        const {  message } = res.data;
         storage.setAccessToken(JSON.stringify(access_token));
         storage.setName(name);
         storage.setTokenExpiry("", Date.now() + 86400000);
         Cookies.set("token", access_token);
         axios.defaults.headers = authHeader();
         setLoading((prevState) => !prevState);
-        setResponseResult(message, "alert-success");
+        authSuccessTimeeOut(navigate, ADDRESSES);
       })
       .catch((err) => {
         console.log(err.response);
@@ -114,80 +115,85 @@ const Register = () => {
     setAlertMessage((prevState) => (prevState = message));
     setShowErrorAlert((prevState) => (prevState = true));
     hideErrorAlert(setShowErrorAlert);
-    authSuccessTimeeOut(navigate)
   };
 
   return (
     <Layout>
       <div className="container">
         <div className="row justify-content-center align-items-center h-100">
-          <form style={{ width: "23rem" }}>
-            <h1
-              className="fw-normal mb-3 pb-3"
-              style={{ letterSpacing: "1px", color: "#0097a7", fontWeight: "400" }}
-            >
-              Register
-            </h1>
+       
+            <form style={{ width: "23rem" }}>
+              <h1
+                className="fw-normal mb-3 pb-3"
+                style={{
+                  letterSpacing: "1px",
+                  color: "#0097a7",
+                  fontWeight: "400",
+                }}
+              >
+                Register
+              </h1>
 
-            <div className="form-outline mb-4">
-              <TextInput
-                type="text"
-                className="form-control"
-                value={name}
-                cb={(e) => onTextChange(e, "name")}
-                ph={`Name`}
-              />
-            </div>
+              <div className="form-outline mb-4">
+                <TextInput
+                  type="text"
+                  className="form-control"
+                  value={name}
+                  cb={(e) => onTextChange(e, "name")}
+                  ph={`Name`}
+                />
+              </div>
 
-            <div className="form-outline mb-4">
-              <TextInput
-                type="email"
-                className="form-control"
-                value={email}
-                cb={(e) => onTextChange(e, "email")}
-                ph={`Email`}
-              />
-            </div>
+              <div className="form-outline mb-4">
+                <TextInput
+                  type="email"
+                  className="form-control"
+                  value={email}
+                  cb={(e) => onTextChange(e, "email")}
+                  ph={`Email`}
+                />
+              </div>
 
-            <div className="form-outline mb-4">
-              <TextInput
-                type="password"
-                className="form-control"
-                value={password}
-                cb={(e) => onTextChange(e, "password")}
-                ph={`Password`}
-              />
-            </div>
+              <div className="form-outline mb-4">
+                <TextInput
+                  type="password"
+                  className="form-control"
+                  value={password}
+                  cb={(e) => onTextChange(e, "password")}
+                  ph={`Password`}
+                />
+              </div>
 
-            <div className="form-outline mb-4">
-              <TextInput
-                type="password"
-                className="form-control"
-                value={password_confirmation}
-                cb={(e) => onTextChange(e, "re-password")}
-                ph={`Retype Password`}
-              />
-            </div>
+              <div className="form-outline mb-4">
+                <TextInput
+                  type="password"
+                  className="form-control"
+                  value={password_confirmation}
+                  cb={(e) => onTextChange(e, "re-password")}
+                  ph={`Retype Password`}
+                />
+              </div>
 
-            <div className="pt-1 mb-4">
-              <Button
-                className={`btn btn-add btn-sm btn-block`}
-                text={`Register`}
-                cb={registerUser}                
-              />
-              <Button
-                className={`btn btn-add btn-sm btn-block ml`}
-                text={`Back to login`}
-                cb={() => navigate(LOGIN)}                
-              />
-            </div>
+              <div className="pt-1 mb-4">
+                <Button
+                  className={`btn btn-add btn-sm btn-block`}
+                  text={`Register`}
+                  cb={registerUser}
+                />
+                <Button
+                  className={`btn btn-add btn-sm btn-block ml`}
+                  text={`Back to login`}
+                  cb={() => navigate(LOGIN)}
+                />
+              </div>
 
-            <Alert
-              message={alertMessage}
-              showErrorAlert={showErrorAlert}
-              className={alertClassName}
-            />
-          </form>
+              <Alert
+                message={alertMessage}
+                showErrorAlert={showErrorAlert}
+                className={alertClassName}
+              />
+            </form>
+          
         </div>
       </div>
     </Layout>

@@ -12,7 +12,7 @@ const LABEL_REQUIRED = "Label is required!";
 const INVALID_IP_ADDRESS = "Invalid IP Address!";
 
 const AddNewIP = () => {
-  const [loading, setLoading] = useOutletContext();
+  const [loading, setLoading] = useState(false);
   const [ip_address, setIpAddress] = useState(null);
   const [label, setLabel] = useState("");
   const [isIPValid, setIsIPValid] = useState(null);
@@ -65,6 +65,8 @@ const AddNewIP = () => {
       .then((res) => {
         const { message } = res.data;
         setResponseResult(message, 'alert-success');
+        setIpAddress(null);
+        setLabel("");
         setLoading(prevState => !prevState)
       })
       .catch((err) => {
