@@ -10,10 +10,9 @@ const Main = () => {
   const [ipAdds, setIPAdds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [ipAdd, setIpAdd] = useState("");
-  const [name, setName] = useState(storage.getItem("name"));
+  const [isLoggedIn, settIsLoggedIn] = useState(storage.isLoggedIn());
 
   useEffect(() => {
-    console.log(name);
     queryIPs();
   }, []);
 
@@ -25,10 +24,7 @@ const Main = () => {
 
   return (
     <Layout>
-      <div className="container">
-        <NavBar />
-        <Outlet context={[ipAdds, loading, ipAdd, setIpAdd, setLoading]} />
-      </div>
+      <Outlet context={[ipAdds, loading, ipAdd, isLoggedIn, setIpAdd, setLoading]} />
     </Layout>
   );
 };

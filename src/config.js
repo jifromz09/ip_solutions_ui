@@ -1,4 +1,5 @@
- 
+import isEmpty from "lodash/isEmpty";
+
 const storage = {};
 
 storage.setAccessToken = (token) => {
@@ -20,5 +21,11 @@ storage.getItem = (key) => {
 storage.clear = () => {
   localStorage.clear();
 };
+
+storage.isLoggedIn = () => {
+  return isEmpty(storage.getItem("access_token")) ? false : true;
+};
+
+console.log(storage);
 
 export default storage;

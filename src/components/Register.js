@@ -132,7 +132,7 @@ const Register = () => {
             <div className="form-outline mb-4">
               <TextInput
                 type="text"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={name}
                 cb={(e) => onTextChange(e, "name")}
                 ph={`Name`}
@@ -142,7 +142,7 @@ const Register = () => {
             <div className="form-outline mb-4">
               <TextInput
                 type="email"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={email}
                 cb={(e) => onTextChange(e, "email")}
                 ph={`Email`}
@@ -152,7 +152,7 @@ const Register = () => {
             <div className="form-outline mb-4">
               <TextInput
                 type="password"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={password}
                 cb={(e) => onTextChange(e, "password")}
                 ph={`Password`}
@@ -162,7 +162,7 @@ const Register = () => {
             <div className="form-outline mb-4">
               <TextInput
                 type="password"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={password_confirmation}
                 cb={(e) => onTextChange(e, "re-password")}
                 ph={`Retype Password`}
@@ -171,16 +171,14 @@ const Register = () => {
 
             <div className="pt-1 mb-4">
               <Button
-                className={`btn btn-add btn-lg btn-block`}
+                className={`btn btn-add btn-sm btn-block`}
                 text={`Register`}
-                cb={registerUser}
-                disabled={loading}
+                cb={registerUser}                
               />
               <Button
-                className={`btn btn-add btn-lg btn-block ml`}
+                className={`btn btn-add btn-sm btn-block ml`}
                 text={`Back to login`}
-                cb={() => navigate(LOGIN)}
-                disabled={loading}
+                cb={() => navigate(LOGIN)}                
               />
             </div>
 

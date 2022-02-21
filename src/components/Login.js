@@ -15,7 +15,7 @@ const EMAIL_REQUIRED = "Email is required!";
 const PASSWORD_REQUIRED = "Password is required!";
 
 const Login = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,7 +62,7 @@ const Login = () => {
         const { message } = res.data;
         storage.setAccessToken(JSON.stringify(access_token));
         storage.setName(name);
-        storage.setTokenExpiry("", Date.now() + 86400000);
+        storage.setTokenExpiry(Date.now() + 86400000);
         Cookies.set("token", access_token);
         axios.defaults.headers = authHeader();
         setLoading((prevState) => !prevState);
@@ -103,7 +103,7 @@ const Login = () => {
             <div className="form-outline mb-4">
               <TextInput
                 type="email"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={email}
                 cb={onEmailTextChange}
                 ph={`Email`}
@@ -113,7 +113,7 @@ const Login = () => {
             <div className="form-outline mb-4">
               <TextInput
                 type="password"
-                className="form-control form-control-lg"
+                className="form-control"
                 value={password}
                 cb={onPasswordTextChange}
                 ph={`Password`}
@@ -122,16 +122,16 @@ const Login = () => {
 
             <div className="pt-1 mb-4">
               <Button
-                className={`btn btn-add btn-lg btn-block`}
+                className={`btn btn-add btn-sm btn-block`}
                 text={`Login`}
-                cb={userLogin}
-                disabled={loading}
+                cb={userLogin}    
+                disabled={loading}           
               />
               <Button
-                className={`btn btn-add btn-lg btn-block ml`}
+                className={`btn btn-add btn-sm btn-block ml`}
                 text={`Register`}
-                cb={() => navigate(REGISTER)}
-                disabled={loading}
+                cb={() => navigate(REGISTER)}  
+                disabled={loading}                
               />
             </div>
             <Alert

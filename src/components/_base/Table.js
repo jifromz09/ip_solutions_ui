@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UPDATE_IP } from "../../constants/RouteConstants";
+import Button from "./Button";
 
 const tableHeaders = ["Id", "IP Address", "Label", "Action"];
 
-const Table = ({ ipAdds }) => {
+const Table = ({ ipAdds, isLoggedIn }) => {
+  const navigate = useNavigate();
   return (
     <>
       <table className="table table-striped">
@@ -32,12 +34,17 @@ const Table = ({ ipAdds }) => {
                   <td>{item.ip_address}</td>
                   <td>{item.label}</td>
                   <td className="action-container">
-                    <Link className="btn btn-sm btn-edit" to={UPDATE_IP}>
-                      Edit
-                    </Link>
-                    <Link className="btn btn-sm btn-logs" to={UPDATE_IP}>
-                      Logs
-                    </Link>
+                    <Button
+                      cb={() => navigate(UPDATE_IP)}
+                      disabled={!isLoggedIn}
+                      className={`btn btn-sm btn-edit`}
+                      text={`Edit`}
+                    />
+                    <Button
+                      cb={() => navigate(UPDATE_IP)}                      
+                      className={`btn btn-sm btn-logs`}
+                      text={`Logs`}
+                    />
                   </td>
                 </tr>
               );

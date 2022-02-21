@@ -31,7 +31,7 @@ const Edit = () => {
           className={`form-control`}
           value={label}
           cb={onLabelChange}
-          ph={`IP Address`}
+          ph={`Label`}
         />
       </div>
       <Button

@@ -1,16 +1,22 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "../../App.css";
 import { colors } from "../../data";
 import Table from "../_base/Table";
-import Button from "../_base/Button";
 import Loader from "../_base/Loader";
-import { Link, useOutletContext } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { SAVE_IP } from "../../constants/RouteConstants";
+import Button from "../_base/Button";
+import storage from "../../config";
 
 const loaderCaption = "loading...";
 
 const List = () => {
   const [ipAdds, loading] = useOutletContext();
+  const navigate = useNavigate();
+  const [isLoggedIn, settIsLoggedIn] = useState(storage.isLoggedIn());
+  useEffect(() => {
+    console.log(storage.isLoggedIn());
+  }, []);
   return (
     <>
       <div className="row px-2">
@@ -20,11 +26,14 @@ const List = () => {
           </div>
         ) : (
           <div className="col">
-            <Table ipAdds={ipAdds} />
+            <Table ipAdds={ipAdds} isLoggedIn={isLoggedIn} />
             <div className="col button-container">
-              <Link className="btn btn-sm btn-add" to={SAVE_IP}>
-                Add
-              </Link>
+              <Button
+                cb={() => navigate(SAVE_IP)}
+                disabled={!isLoggedIn}
+                className={`btn btn-sm btn-edit`}
+                text={`Add`}
+              />
             </div>
           </div>
         )}
