@@ -1,6 +1,13 @@
 import React from "react";
 
-function TextInput({ className, value = "", ph, cb, disabled = false }) {
+function TextInput({
+  className,
+  value = "",
+  ph,
+  cb,
+  disabled = false,
+  type = "text",
+}) {
   const onTextChange = (e) => {
     cb(e);
   };
@@ -8,7 +15,7 @@ function TextInput({ className, value = "", ph, cb, disabled = false }) {
     <>
       <input
         onChange={(e) => onTextChange(e)}
-        type="text"
+        type={type}
         className={className}
         value={value}
         placeholder={ph}
