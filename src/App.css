@@ -1,3 +1,4 @@
+ 
 .Wrapper {
   position: absolute;
   top: 0;
@@ -8,6 +9,11 @@
   align-content: center;
   align-items: center;
   background-color: #eeeeee;
+  height: 100%;
+}
+
+.table>tbody {
+  border-top: none!important;
 }
 
 .navbar {
@@ -46,15 +52,30 @@
   padding: 5px 0px;
 }
 
-.btn-primary,
+
 .btn-secondary {
   width: 4.5rem;
 }
+
+.btn-primary{
+  width: 3rem!important;
+}
+
+ .pagination {
+  flex-direction: row!important;
+ }
 
 .btn-edit,
 .btn-add {
   background-color: #0097a7;
 }
+
+ .subHeader {
+   letter-spacing: 1px;
+   font-size: 25px;
+   color: #0097a7;
+   text-align: center;
+ }
 
  
 .btn-logs {
@@ -89,7 +110,7 @@
 
 h1 {
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   text-align: center;
 }
 
@@ -99,7 +120,7 @@ h1 {
 
 .h1,
 h1 {
-  font-size: 2rem !important;
+  font-size: 1.8rem !important;
 }
 
 .button-container {
@@ -165,5 +186,11 @@ h1 {
 @media (min-width: 992px) {
   .container {
     max-width: 960px;
+  }
+}
+
+@media (max-width: 400px) {  
+  .table-responsive {
+      font-size:10px !important;
   }
 }

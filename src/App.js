@@ -1,51 +1,48 @@
-import React, { lazy, Suspense } from "react";
+import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import PrivateRouteWrapper from "./components/Route/PrivateRouteWrapper";
-import Loader from "./components/_base/Loader";
-
+ 
 import {
   SAVE_IP,
   UPDATE_IP,
   LOGIN,
   REGISTER,
   ADDRESSES,
+  IP_LOGS,
+  USER_ACTIVITY_LOGS,
+  USER_AUDIT_TRAILS,
 } from "../src/constants/RouteConstants";
-import storage from "./config";
 
-const Login = lazy(() => import("./components/Login"));
-const Register = lazy(() => import("./components/Register"));
-const Edit = lazy(() => import("./components/ip/Edit"));
-const List = lazy(() => import("./components/ip/List"));
-const Main = lazy(() => import("./components/Main"));
-const AddNewIP = lazy(() => import("./components/ip/AddNewIP"));
-const NotFound = lazy(() => import("./components/NotFound"));
+import Login from "./components/Login";
+import Register from "./components/Register";
+import EditIP from "./components/IPS/EditIP";
+import IPList from "./components/IPS/IPList";
+import Main from "./components/Main";
+import AddNewIP from "./components/IPS/AddNewIP";
+import NotFound from "./components/NotFound";
+import IPAuditLogs from "./components/IPS/IPAuditLogs";
+import UserLogs from "./components/User/UserLogs";
+import AuditTrails from "./components/User/AuditTrails";
 
 const App = () => {
-  const isAuthenticated = storage.isLoggedIn();
- 
   return (
     <>
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          <Route path={LOGIN} element={<Login />} />
-          <Route path={ADDRESSES} element={<Main />}>
-            <Route path={ADDRESSES} element={<List />} />
-            <Route path={SAVE_IP} element={
-              <PrivateRouteWrapper isAuthenticated={isAuthenticated} redirectTo={LOGIN}>
-                <AddNewIP />
-              </PrivateRouteWrapper>
-            } />
-            <Route path={UPDATE_IP} element={
-              <PrivateRouteWrapper isAuthenticated={isAuthenticated} redirectTo={LOGIN}>
-                <Edit />
-              </PrivateRouteWrapper>
-            } />
-          </Route>
-          <Route path={REGISTER} element={<Register />} />
-          <Route path='*' element={<NotFound />} />
-        </Routes>
-      </Suspense>
+    
+      <Routes>
+        <Route path={LOGIN} element={<Login />} />
+        <Route path={ADDRESSES} element={<Main />}>
+          {/* ... protected children subroutes ... */}
+          <Route path={ADDRESSES} element={<IPList />} />
+            <Route path={SAVE_IP} element={<AddNewIP />} />
+            <Route path={`${UPDATE_IP}/:id`} element={<EditIP />} />
+            <Route path={`${IP_LOGS}/:id`} element={<IPAuditLogs />} />
+        </Route>
+
+        <Route path={USER_ACTIVITY_LOGS} element={<UserLogs />} /> 
+        <Route path={USER_AUDIT_TRAILS} element={<AuditTrails />} /> 
+        <Route path={REGISTER} element={<Register />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </>
   );
 };

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { ADDRESSES, REGISTER, LOGIN } from "../../constants/RouteConstants";
+import {
+  ADDRESSES,
+  REGISTER,
+  LOGIN,
+  USER_ACTIVITY_LOGS,
+  USER_AUDIT_TRAILS
+} from "../../constants/RouteConstants";
 import { Link, useNavigate } from "react-router-dom";
 import storage from "../../config";
 import { logout } from "../../data/api";
@@ -9,9 +15,7 @@ import Cookies from "js-cookie";
 const NavBar = () => {
   const name = storage.getItem("name");
   const isLoggedIn = storage.isLoggedIn();
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [alertClassName, setAlertClassName] = useState("alert-danger");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,23 +28,14 @@ const NavBar = () => {
   const onLogoutUser = async () => {
     await logout()
       .then((res) => {
-        console.log(res);
-        const { message } = res.data;
+        // const { message } = res.data;
         storage.clear();
         Cookies.remove("token");
-        setResponseResult(message, "alert-success");
+        authSuccessTimeeOut(navigate, LOGIN);
       })
       .catch((err) => {
         console.log(err.response);
       });
-  };
-
-  const setResponseResult = (message, className) => {
-    setAlertClassName((prevState) => (prevState = className));
-    setAlertMessage((prevState) => (prevState = message));
-    setShowErrorAlert((prevState) => (prevState = true));
-    hideErrorAlert(setShowErrorAlert);
-    authSuccessTimeeOut(navigate, LOGIN);
   };
 
   return (
@@ -51,9 +46,10 @@ const NavBar = () => {
             IP Management Solutions
           </strong>
         </Link>
-        <ul className="nav justify-content-center">
-          {isLoggedIn && (
-            <li className="nav-item">
+
+        {isLoggedIn && (
+          <ul className="nav justify-content-center">
+            <div className="nav-item">
               <div className="row">
                 <div className="col g-0 d-flex justify-content-center">
                   <a className="navbar-brand" href="#">
@@ -72,31 +68,49 @@ const NavBar = () => {
                     </svg>
                   </a>
                 </div>
-                <div className="col d-flex justify-content-center">
-                  <div className="col d-flex justify-content-end">
-                    <strong style={{ color: "#ffffff", fontSize: "12px" }}>
-                      {`${name}!`}
-                    </strong>
-                  </div>
-                  <div className="col d-flex justify-content-start">
-                    <strong
-                      style={{
-                        color: "#ffffff",
-                        fontSize: "12px",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => {
-                        onLogoutUser();
-                      }}
+                <div className="col g-0 d-flex justify-content-center align-items-start">
+                  <li className="nav-item dropdown">
+                    <a
+                      style={{ color: "#ffffff" }}
+                      className="nav-link dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      role="button"
+                      aria-expanded="false"
                     >
-                      {`Logout`}
-                    </strong>
-                  </div>
+                      {name}
+                    </a>
+                    <ul className="dropdown-menu">
+                      <li>
+                        <Link to={USER_ACTIVITY_LOGS} className="dropdown-item">
+                          Activity logs
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={USER_AUDIT_TRAILS} className="dropdown-item">
+                          Audit trails
+                        </Link>
+                      </li>
+                      <li>
+                        <hr className="dropdown-divider" />
+                      </li>
+                      <li>
+                        <span
+                          onClick={() => onLogoutUser()}
+                          className="dropdown-item"
+                        >
+                          Logout
+                        </span>
+                      </li>
+                    </ul>
+                  </li>
                 </div>
               </div>
-            </li>
-          )}
-          {!isLoggedIn && (
+            </div>
+          </ul>
+        )}
+        {!isLoggedIn && (
+          <ul className="nav justify-content-center">
             <li className="nav-item">
               <Link className="navbar-brand" to={ADDRESSES}>
                 <strong style={{ color: "#ffffff", fontSize: "12px" }}>
@@ -104,9 +118,6 @@ const NavBar = () => {
                 </strong>
               </Link>
             </li>
-          )}
-          
-          {!isLoggedIn && (
             <li className="nav-item px-2">
               <Link className="navbar-brand" to={LOGIN}>
                 <strong style={{ color: "#ffffff", fontSize: "12px" }}>
@@ -114,8 +125,6 @@ const NavBar = () => {
                 </strong>
               </Link>
             </li>
-          )}
-          {!isLoggedIn && (
             <li className="nav-item">
               <Link className="navbar-brand" to={REGISTER}>
                 <strong style={{ color: "#ffffff", fontSize: "12px" }}>
@@ -123,8 +132,8 @@ const NavBar = () => {
                 </strong>
               </Link>
             </li>
-          )}
-        </ul>
+          </ul>
+        )}
       </div>
     </nav>
   );

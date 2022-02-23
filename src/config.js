@@ -1,31 +1,39 @@
 import isEmpty from "lodash/isEmpty";
 
-const storage = {};
+const storage = {
+  setAccessToken: (token) => {
+    localStorage.setItem("access_token", token);
+  },
 
-storage.setAccessToken = (token) => {
-  localStorage.setItem("access_token", token);
+  setUserId: (userId) => {
+    localStorage.setItem("userId", userId);
+  },
+
+  setName: (name) => {
+    localStorage.setItem("name", name);
+  },
+
+  getName: () => {
+    console.log(localStorage.getItem("name"));
+  },
+
+  setTokenExpiry: (expires_at) => {
+    localStorage.setItem("expires_at", expires_at);
+  },
+
+  getItem: (key) => {
+    return localStorage.getItem(key);
+  },
+
+  clear: () => {
+    localStorage.clear();
+  },
+
+  isLoggedIn: () => {
+    return isEmpty(JSON.parse(localStorage.getItem("access_token")))
+      ? false
+      : true;
+  },
 };
-
-storage.setName = (name) => {
-  localStorage.setItem("name", name);
-};
-
-storage.setTokenExpiry = (expires_at) => {
-  localStorage.setItem("expires_at", expires_at);
-};
-
-storage.getItem = (key) => {
-  return localStorage.getItem(key);
-};
-
-storage.clear = () => {
-  localStorage.clear();
-};
-
-storage.isLoggedIn = () => {
-  return isEmpty(storage.getItem("access_token")) ? false : true;
-};
-
- 
 
 export default storage;

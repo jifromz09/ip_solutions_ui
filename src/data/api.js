@@ -1,31 +1,60 @@
 import axios from "axios";
 import {
-  BASE_URL,
   IP_LIST,
   SAVE_IP,
   LOGIN,
   REGISTER,
   LOGOUT,
+  UPDATE_IP,
+  USER_LOGS,
+  AUDIT_TRAILS,
 } from "../constants/ApiConstants";
 
-const fetch_ip = `${BASE_URL}/${IP_LIST}`;
-const save_ip = `${BASE_URL}/${SAVE_IP}`;
-const login_user = `${BASE_URL}/${LOGIN}`;
-const register_user = `${BASE_URL}/${REGISTER}`;
-const logout_user = `${BASE_URL}/${LOGOUT}`;
-
-export const getIPAddresses = async () => {
-  const { data: response } = await axios.get(fetch_ip);
+ 
+export const getIPAddresses = async (queryString) => {
+  const url = queryString ?? IP_LIST;
+  const { data: response } = await axios.get(url);
   return response;
 };
 
+export const getUserLogs = async (queryString) => {
+  const url = queryString ?? USER_LOGS;
+  const { data: response } = await axios.get(
+    url,
+    { headers: authHeader() }
+  );
+  return response;
+};
+export const getUserAuditTrails = async (queryString) => {
+  const url = queryString ?? AUDIT_TRAILS;
+  const { data: response } = await axios.get(
+    url,
+    { headers: authHeader() }
+  );
+  return response;
+};
+
+ 
+
 export const saveIPAdress = async (data) => {
   const { label, ip_address } = data;
-  return await axios.post(save_ip, { label, ip_address });
+  return await axios.post(
+    SAVE_IP,
+    { label, ip_address },
+    { headers: authHeader() }
+  );
+};
+
+export const updateIPLabel = async (label, id) => {
+  return await axios.put(
+    `${UPDATE_IP}/${id}`,
+    { label },
+    { headers: authHeader() }
+  );
 };
 
 export const login = async ({ email, password }) => {
-  return await axios.post(login_user, { email, password });
+  return await axios.post(LOGIN, { email, password });
 };
 
 export const register = async ({
@@ -35,7 +64,7 @@ export const register = async ({
   name,
   type = 2,
 }) => {
-  return await axios.post(register_user, {
+  return await axios.post(REGISTER, {
     email,
     password,
     password_confirmation,
@@ -45,8 +74,7 @@ export const register = async ({
 };
 
 export const logout = async () => {
-  console.log(authHeader());
-  return await axios.post(logout_user, {}, { headers: authHeader() });
+  return await axios.post(LOGOUT, {}, { headers: authHeader() });
 };
 
 export const authHeader = () => {

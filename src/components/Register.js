@@ -118,10 +118,10 @@ const Register = () => {
   };
 
   return (
-    <Layout>
+    <div className="Wrapper">
       <div className="container">
         <div className="row justify-content-center align-items-center h-100">
-       
+          {!loading ? (
             <form style={{ width: "23rem" }}>
               <h1
                 className="fw-normal mb-3 pb-3"
@@ -186,17 +186,15 @@ const Register = () => {
                   cb={() => navigate(LOGIN)}
                 />
               </div>
-
-              <Alert
-                message={alertMessage}
-                showErrorAlert={showErrorAlert}
-                className={alertClassName}
-              />
             </form>
-          
+          ) : (
+            <div className="col">
+              <Loader caption={LOADER_CAPTION} show={true}/>
+            </div>
+          )}
         </div>
       </div>
-    </Layout>
+    </div>
   );
 };
 

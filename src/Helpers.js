@@ -1,4 +1,5 @@
  
+import moment from "moment";
 export const hideErrorAlert = (callBack) => {
   setTimeout(() => {
     callBack((prevState) => (prevState = false));
@@ -8,7 +9,11 @@ export const hideErrorAlert = (callBack) => {
 export const authSuccessTimeeOut = (cb, route) => {
   setTimeout(() => {
     cb(route);
-  }, 1500);
+  }, 0);
+};
+
+export const formatDate = (date) => {
+  return moment(date).format("MMM DD, YY, h:mm:ss a");
 };
 
  

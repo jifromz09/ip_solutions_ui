@@ -1,27 +1,42 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import Button from "../_base/Button";
-import { Link, useOutletContext } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ADDRESSES } from "../../constants/RouteConstants";
 import TextInput from "../_base/TextInput";
 import { isIP } from "is-ip";
 import Alert from "../_base/Alert";
 import { saveIPAdress } from "../../data/api";
-import {hideErrorAlert} from '../../Helpers';
-
-const LABEL_REQUIRED = "Label is required!";
-const INVALID_IP_ADDRESS = "Invalid IP Address!";
+import { hideErrorAlert } from "../../Helpers";
+import { AppContext } from "../Main";
+import {
+  INVALID_IP_ADDRESS,
+  LABEL_REQUIRED,
+} from "../../constants/AlertMessages";
 
 const AddNewIP = () => {
-  const [loading, setLoading] = useState(false);
+  const {
+    loading,
+    setLoading,
+    showErrorAlert,
+    setShowErrorAlert,
+    alertMessage,
+    setAlertMessage,
+    alertClassName,
+    setResponseResult,
+    setAlertClassName,
+  } = useContext(AppContext);
+
+  const navigate = useNavigate();
   const [ip_address, setIpAddress] = useState(null);
   const [label, setLabel] = useState("");
   const [isIPValid, setIsIPValid] = useState(null);
-  const [showErrorAlert, setShowErrorAlert] = useState(false);
-  const [alertMessage, setAlertMessage] = useState(INVALID_IP_ADDRESS);
-  const [alertClassName, setAlertClassName] = useState("alert-danger");
+
+  const isMounted = useRef(false);
 
   useEffect(() => {
+    isMounted.current = true;
     return () => {
+      isMounted.current = false;
       clearTimeout(hideErrorAlert);
     };
   }, []);
@@ -43,16 +58,12 @@ const AddNewIP = () => {
 
   const saveIPAddress = () => {
     if (!isIPValid || !ip_address) {
-      setShowErrorAlert((prevState) => (prevState = true));
-      setAlertMessage((prevState) => (prevState = INVALID_IP_ADDRESS));
-      hideErrorAlert(setShowErrorAlert);
+      showAlert(INVALID_IP_ADDRESS);
       return;
     }
 
     if (!label) {
-      setShowErrorAlert((prevState) => (prevState = true));
-      setAlertMessage((prevState) => (prevState = LABEL_REQUIRED));
-      hideErrorAlert(setShowErrorAlert);
+      showAlert(LABEL_REQUIRED);
       return;
     }
 
@@ -60,30 +71,28 @@ const AddNewIP = () => {
   };
 
   const saveNewIP = async () => {
-    setLoading(prevState => !prevState)
+    setLoading((prevState) => !prevState);
     await saveIPAdress({ label, ip_address })
       .then((res) => {
-        const { message } = res.data;
-        setResponseResult(message, 'alert-success');
-        setIpAddress(null);
-        setLabel("");
-        setLoading(prevState => !prevState)
+        const { message, data } = res.data;       
+        if (!isMounted.current) return;       
+        setResponseResult(message, "alert-success");
+        setIpAddress((prevState) => (prevState = null));
+        setLabel((prevState) => (prevState = ""));
       })
       .catch((err) => {
         const { message } = err.response.data;
-        setResponseResult(message, 'alert-danger');
-        setLoading(prevState => !prevState)
+        setResponseResult(message, "alert-danger");
       });
   };
 
-  const setResponseResult = (message, className) => {
-    setAlertClassName((prevState) => (prevState = className));
-    setAlertMessage((prevState) => (prevState = message));
+  const showAlert = (message) => {
     setShowErrorAlert((prevState) => (prevState = true));
+    setAlertMessage((prevState) => (prevState = message));
+    setAlertClassName((prevState) => (prevState = "alert-danger"));
     hideErrorAlert(setShowErrorAlert);
-  }
+  };
 
- 
   return (
     <div className="row g-0">
       <div className="col p-4">
@@ -107,17 +116,14 @@ const AddNewIP = () => {
         </div>
         <Button
           disabled={loading}
-          className={`btn-primary btn-sm`}
+          className={`btn btn-sm btn-edit`}
           cb={() => {
             saveIPAddress();
           }}
-          text={`Save`}
+          text={loading ? "Saving..." : "Save"}
         />
-        <Link
-          disabled={loading}
-          className="btn btn-secondary ms-2 btn-sm"
-          to={ADDRESSES}
-        >
+        
+        <Link className={`btn btn-secondary ms-2 btn-sm`} to={ADDRESSES}>
           Back
         </Link>
         <Alert

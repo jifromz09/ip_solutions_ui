@@ -1,13 +1,10 @@
-import React from "react";
 import { Navigate } from "react-router-dom";
+import storage from "../../config";
+import { LOGIN } from "../../constants/RouteConstants";
 
-const PrivateRouteWrapper = ({
-  isAuthenticated,
-  children: Component,
-  redirectTo,
-}) => {
-  if (isAuthenticated) return <Component />;
-  return <Navigate to={redirectTo} replace />;
+const PrivateRouteWrapper = ({ children }) => {
+  const isAuthenticated = storage.isLoggedIn();
+  return isAuthenticated ? children : <Navigate to={LOGIN} />;
 };
 
 export default PrivateRouteWrapper;
