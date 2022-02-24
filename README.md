@@ -9,7 +9,7 @@ $ npm install
 ### 2. Run the app
 
 ```sh
-$ npm start to run locall
+$ npm start
 ```
 
 ```sh
