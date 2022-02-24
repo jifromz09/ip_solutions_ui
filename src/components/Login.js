@@ -19,8 +19,8 @@ const LOADER_CAPTION = "Logging in....";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("jifford.romasanta01@outlook.com");
-  const [password, setPassword] = useState("jifromz1988");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(EMAIL_REQUIRED);
   const [alertClassName, setAlertClassName] = useState("alert-danger");
