@@ -123,13 +123,13 @@ const Login = () => {
 
               <div className="pt-1 mb-4">
                 <Button
-                  className={`btn btn-add btn-sm btn-block`}
+                  className={`btn btn-primary btn-sm btn-block`}
                   text={`Login`}
                   cb={userLogin}
                   disabled={loading}
                 />
                 <Button
-                  className={`btn btn-add btn-sm btn-block ml`}
+                  className={`btn btn-primary btn-sm btn-block ml`}
                   text={`Register`}
                   cb={() => navigate(REGISTER)}
                   disabled={loading}

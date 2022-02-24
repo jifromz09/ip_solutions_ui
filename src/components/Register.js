@@ -176,12 +176,12 @@ const Register = () => {
 
               <div className="pt-1 mb-4">
                 <Button
-                  className={`btn btn-add btn-sm btn-block`}
+                  className={`btn btn-primary btn-sm btn-block`}
                   text={`Register`}
                   cb={() => registerUser()}
                 />
                 <Button
-                  className={`btn btn-add btn-sm btn-block ml`}
+                  className={`btn btn-primary btn-sm btn-block ml`}
                   text={`Back to login`}
                   cb={() => navigate(LOGIN)}
                 />
