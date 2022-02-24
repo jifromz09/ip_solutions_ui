@@ -30,15 +30,7 @@ const IPList = () => {
         {!loading && (
           <div className="row px-3">
             <h2 className="mb-3 pt-3 subHeader">IP Address List</h2>
-
-            {/* <div className="col button-container">
-              <Button
-                cb={() => navigate(SAVE_IP)}
-                disabled={!isLoggedIn}
-                className={`btn-primary btn-sm`}
-                text={`Add new`}
-              />
-            </div> */}
+            
             <Table header={ipListTableHeader}>
               {!isEmpty(ipAdds.data) && (
                 <IPListTableBody ipAdds={ipAdds.data} isLoggedIn={isLoggedIn} />
