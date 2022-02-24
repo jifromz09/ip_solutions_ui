@@ -74,8 +74,8 @@ const AddNewIP = () => {
     setLoading((prevState) => !prevState);
     await saveIPAdress({ label, ip_address })
       .then((res) => {
-        const { message, data } = res.data;       
-        if (!isMounted.current) return;       
+        const { message, data } = res.data;
+        if (!isMounted.current) return;
         setResponseResult(message, "alert-success");
         setIpAddress((prevState) => (prevState = null));
         setLabel((prevState) => (prevState = ""));
@@ -95,8 +95,8 @@ const AddNewIP = () => {
 
   return (
     <div className="row g-0">
-      <div className="col p-4">
-        <div className="input-group mb-3">
+      <div className="col-sm-12 col-md-8 col-lg-6 p-4">
+        <div className="input-group input-group-sm mb-2">
           <TextInput
             className={`form-control ${
               isIPValid === false ? "border border-3 border-danger" : ""
@@ -106,7 +106,7 @@ const AddNewIP = () => {
             ph={`IP Address`}
           />
         </div>
-        <div className="input-group mb-3">
+        <div className="input-group input-group-sm mb-3">
           <TextInput
             className={`form-control`}
             cb={onLabelChange}
@@ -114,18 +114,25 @@ const AddNewIP = () => {
             ph={`Label`}
           />
         </div>
-        <Button
-          disabled={loading}
-          className={`btn btn-sm btn-edit`}
-          cb={() => {
-            saveIPAddress();
-          }}
-          text={loading ? "Saving..." : "Save"}
-        />
-        
-        <Link className={`btn btn-secondary ms-2 btn-sm`} to={ADDRESSES}>
-          Back
-        </Link>
+        <div className="d-grid gap-2 d-md-block">
+          <Button
+            disabled={loading}
+            className={`btn-primary btn-sm`}
+            cb={() => {
+              saveIPAddress();
+            }}
+            text={"Save"}
+          />
+          <Button
+            disabled={loading}
+            className={`btn-secondary btn-sm`}
+            cb={() => {
+              navigate(ADDRESSES);
+            }}
+            text={`Back to list`}
+          />
+         
+        </div>
         <Alert
           message={alertMessage}
           showErrorAlert={showErrorAlert}

@@ -39,7 +39,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className="navbar navbar-light bg-light">
+    <nav className="navbar">
       <div className="container-fluid">
         <Link className="navbar-brand" to={ADDRESSES}>
           <strong style={{ color: "#ffffff", fontSize: "18px" }}>
@@ -83,12 +83,17 @@ const NavBar = () => {
                     <ul className="dropdown-menu">
                       <li>
                         <Link to={USER_ACTIVITY_LOGS} className="dropdown-item">
-                          Activity logs
+                          User Activity logs
                         </Link>
                       </li>
                       <li>
                         <Link to={USER_AUDIT_TRAILS} className="dropdown-item">
-                          Audit trails
+                          User Audit trails
+                        </Link>
+                      </li>
+                      <li>
+                        <Link to={ADDRESSES} className="dropdown-item">
+                          IP List
                         </Link>
                       </li>
                       <li>

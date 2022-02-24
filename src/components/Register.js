@@ -178,7 +178,7 @@ const Register = () => {
                 <Button
                   className={`btn btn-add btn-sm btn-block`}
                   text={`Register`}
-                  cb={registerUser}
+                  cb={() => registerUser()}
                 />
                 <Button
                   className={`btn btn-add btn-sm btn-block ml`}
@@ -186,10 +186,15 @@ const Register = () => {
                   cb={() => navigate(LOGIN)}
                 />
               </div>
+              <Alert
+                message={alertMessage}
+                showErrorAlert={showErrorAlert}
+                className={alertClassName}
+              />
             </form>
           ) : (
             <div className="col">
-              <Loader caption={LOADER_CAPTION} show={true}/>
+              <Loader caption={LOADER_CAPTION} show={true} />
             </div>
           )}
         </div>

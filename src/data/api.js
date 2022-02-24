@@ -8,9 +8,9 @@ import {
   UPDATE_IP,
   USER_LOGS,
   AUDIT_TRAILS,
+  IP_AUDIT_TRAILS,
 } from "../constants/ApiConstants";
 
- 
 export const getIPAddresses = async (queryString) => {
   const url = queryString ?? IP_LIST;
   const { data: response } = await axios.get(url);
@@ -19,22 +19,21 @@ export const getIPAddresses = async (queryString) => {
 
 export const getUserLogs = async (queryString) => {
   const url = queryString ?? USER_LOGS;
-  const { data: response } = await axios.get(
-    url,
-    { headers: authHeader() }
-  );
-  return response;
-};
-export const getUserAuditTrails = async (queryString) => {
-  const url = queryString ?? AUDIT_TRAILS;
-  const { data: response } = await axios.get(
-    url,
-    { headers: authHeader() }
-  );
+  const { data: response } = await axios.get(url, { headers: authHeader() });
   return response;
 };
 
- 
+export const getUserAuditTrails = async (queryString) => {
+  const url = queryString ?? AUDIT_TRAILS;
+  const { data: response } = await axios.get(url, { headers: authHeader() });
+  return response;
+};
+
+export const geIPAuditTrails = async ({ id, queryString }) => {
+  const url = queryString ?? `${IP_AUDIT_TRAILS}/${id}`;
+  const { data: response } = await axios.get(url, { headers: authHeader() });
+  return response;
+};
 
 export const saveIPAdress = async (data) => {
   const { label, ip_address } = data;

@@ -7,8 +7,15 @@ import Layout from "../Layout/Layout";
 import Loader from "../_base/Loader";
 import { LOADER_CAPTION } from "../../constants/Constants";
 import storage from "../../config";
+import Table from "../_base/Table/Table";
+import NoDataFound from "../_base/Table/NoDataFound";
+
+import { Link } from "react-router-dom";
+
+import isEmpty from "lodash/isEmpty";
 
 import { getUserLogs } from "../../data/api";
+import {ADDRESSES} from "../../constants/RouteConstants";
 
 const UserLogs = () => {
   const isMounted = useRef(false);
@@ -35,6 +42,27 @@ const UserLogs = () => {
       });
   };
 
+  const renderRows = () => {
+    return logs.data.map((item, i) => {
+      return (
+        <tr key={i}>
+          <th scope="row">
+            <small>{item.id}</small>
+          </th>
+          <td>
+            <small>{item.log_type}</small>{" "}
+          </td>
+          <td>
+            <small>{item.data}</small>
+          </td>
+          <td>
+            <small>{formatDate(item.date)}</small>{" "}
+          </td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <Layout isLoggedIn={isLoggedIn}>
       <div
@@ -42,60 +70,40 @@ const UserLogs = () => {
           loading ? "align-items-center" : "align-items-start"
         } h-100`}
       >
-        {loading ? (
-          <div className="col">
-            <Loader caption={LOADER_CAPTION} show={true} />
-          </div>
-        ) : (
-          <div className="col">
-            <h2 className="py-1 subHeader">Log Audit</h2>
-            <table className="table table-striped table-sm table-bordered">
-              <thead>
-                <tr>
-                  {userLogsTableHeader.map((thead, i) => {
-                    return (
-                      <th
-                        className={`${
-                          thead === "Action" ? "thead-action" : ""
-                        }`}
-                        scope="col"
-                        key={thead}
-                      >
-                        {thead}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {logs.data &&
-                  logs.data.map((item, i) => {
-                    return (
-                      <tr key={i}>
-                        <th scope="row">
-                          <small>{item.id}</small>
-                        </th>
-                        <td>
-                          <small>{item.log_type}</small>{" "}
-                        </td>
-                        <td>
-                          <small>{item.data}</small>
-                        </td>
-                        <td>
-                          <small>{formatDate(item.date)}</small>{" "}
-                        </td>
-                      </tr>
-                    );
-                  })}
-              </tbody>
-            </table>
-            <div className="d-flex justify-content-center align-items-center mt-3 pagination">
-              <nav aria-label="Page navigation">
-                <Pagination pageData={logs} cb={fetchUserLogs} />
-              </nav>
+        <div className="col">
+
+          {loading && <Loader caption={LOADER_CAPTION} show={true} />}
+
+          {!loading && (
+            <div className="row px-3">
+              <h2 className="mb-3 pt-3 subHeader">User Audit Logs</h2>
+              <Table header={userLogsTableHeader}>
+                {!isEmpty(logs.data) && (
+                  <tbody>{logs.data && renderRows()}</tbody>
+                )}
+              </Table>
+              {isEmpty(logs.data) && <NoDataFound />}
+              {!isEmpty(logs.data) && (
+                <div className="row button-container">
+                  <div className="col">
+                    <Link
+                      className="btn btn-secondary ms-2 btn-sm"
+                      to={ADDRESSES}
+                    >
+                       Back to list
+                    </Link>
+                  </div>
+                  <div className="col">
+                    <Pagination                     
+                      pageData={logs}
+                      cb={fetchUserLogs}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </Layout>
   );

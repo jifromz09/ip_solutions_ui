@@ -20,7 +20,7 @@ export const userAuditTrailTableHeader = [
 
 export const userLogsTableHeader = ["Id", "Type", "Data", "Date/Time"];
 
-export const ipAudotLogsTableHeader = [
+export const ipAuditLogsTableHeader = [
   "Id",
   "User Id",
   "Event",

@@ -3,13 +3,20 @@ import "../../App.css";
 import { formatDate } from "../../Helpers";
 import { userAuditTrailTableHeader } from "../../data/static/tableHeader";
 import Pagination from "../_base/Pagination";
-
+import Table from "../../components/_base/Table/Table";
+ 
 import Layout from "../Layout/Layout";
 import Loader from "../_base/Loader";
 import { LOADER_CAPTION } from "../../constants/Constants";
 import storage from "../../config";
 
+import isEmpty from 'lodash/isEmpty';
+import NoDataFound from "../_base/Table/NoDataFound";
+
 import { getUserAuditTrails } from "../../data/api";
+
+import {Link} from "react-router-dom";
+import {ADDRESSES}from "../../constants/RouteConstants";
 
 const AuditTrails = () => {
   const isMounted = useRef(false);
@@ -37,7 +44,6 @@ const AuditTrails = () => {
 
   const renderRows = () => {
     return audits.data.map((item, i) => {
-      console.log(item);
       return item.audits.map((audit, i) => {
         return (
           <tr key={i}>
@@ -71,39 +77,37 @@ const AuditTrails = () => {
         className={`row px-2 justify-content-center ${
           loading ? "align-items-center" : "align-items-start"
         } h-100`}
-      >
-        {loading ? (
-          <div className="col">
-            <Loader caption={LOADER_CAPTION} show={true} />
-          </div>
-        ) : (
-          <div className="col">
-            <h2 className="py-1 subHeader">Activity Audit</h2>
-            <table className="table table-striped table-sm table-bordered">
-              <thead>
-                <tr>
-                  {userAuditTrailTableHeader.map((thead, i) => {
-                    return (
-                      <th
-                        className={`${
-                          thead === "Action" ? "thead-action" : ""
-                        }`}
-                        scope="col"
-                        key={thead}
-                      >
-                        {thead}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>{audits.data && renderRows()}</tbody>
-            </table>
-            <div className="d-flex justify-content-center align-items-center mt-3 pagination">
-              <nav aria-label="Page navigation">
-                <Pagination pageData={audits} cb={fetchUserAuditTrails} />
-              </nav>
-            </div>
+      >     
+
+        {loading && <Loader caption={LOADER_CAPTION} show={true} />}
+
+        {!loading && (
+          <div className="row px-3">
+            <h2 className="mb-3 pt-3 subHeader">User Audit Trails</h2>
+            <Table header={userAuditTrailTableHeader}>
+              {!isEmpty(audits.data) && (
+                <tbody>{audits.data && renderRows()}</tbody>
+              )}
+            </Table>
+            {isEmpty(audits.data) && <NoDataFound />}
+            {!isEmpty(audits.data) && (
+              <div className="row button-container">
+                <div className="col">
+                  <Link
+                    className="btn btn-secondary ms-2 btn-sm"
+                    to={ADDRESSES}
+                  >
+                    Back to list
+                  </Link>
+                </div>
+                <div className="col">
+                  <Pagination                  
+                    pageData={audits}
+                    cb={audits}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

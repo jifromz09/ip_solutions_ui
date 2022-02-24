@@ -11,12 +11,12 @@ const IPListTableBody = ({ ipAdds, isLoggedIn }) => {
   const onUpdate = ({ label, id, ip_address }) => {
     navigate(`${UPDATE_IP}/${id}`, { state: { label, id, ip_address } });
   };
-  const onViewLogs = ({ audits, id }) => {
-    navigate(`${IP_LOGS}/${id}`, { state: { audits } });
+  const onViewLogs = ({ id }) => {
+    navigate(`${IP_LOGS}/${id}`, { state: {id: id} });
   };
 
   return (
-    <>
+    <tbody>
       {ipAdds &&
         ipAdds.map((item) => {
           return (
@@ -29,23 +29,25 @@ const IPListTableBody = ({ ipAdds, isLoggedIn }) => {
                 <small>{item.label}</small>
               </td>
               <td className="action-container">
-                <Button
-                  cb={() => onUpdate(item)}
-                  disabled={!isLoggedIn}
-                  className={`btn btn-sm btn-edit`}
-                  text={`Edit`}
-                />
-                <Button
-                  cb={() => onViewLogs(item)}
-                  disabled={!isLoggedIn}
-                  className={`btn btn-sm btn-logs`}
-                  text={`Logs`}
-                />
+                <div className="d-grid gap-2 d-sm-block">
+                  <Button
+                    cb={() => onUpdate(item)}
+                    disabled={!isLoggedIn}
+                    className={`btn-primary btn-sm`}
+                    text={`Edit`}
+                  />
+                  <Button
+                    cb={() => onViewLogs(item)}
+                    disabled={!isLoggedIn}
+                    className={`btn-secondary btn-sm`}
+                    text={`Logs`}
+                  />
+                </div>
               </td>
             </tr>
           );
         })}
-    </>
+    </tbody>
   );
 };
 

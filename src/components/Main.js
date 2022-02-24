@@ -18,7 +18,7 @@ const Provider = ({ children }) => {
 
   const [ipAdds, setIPAdds] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);  
+  const [isLoggedIn, setIsLoggedIn] = useState(storage.isLoggedIn());  
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(INVALID_IP_ADDRESS);
   const [alertClassName, setAlertClassName] = useState("alert-danger");
@@ -27,7 +27,7 @@ const Provider = ({ children }) => {
 
   useEffect(() => {
     isMounted.current = true;
-    setIsLoggedIn((prevState) => (prevState = storage.isLoggedIn()));
+     
     queryIPs(null);
     return () => (isMounted.current = false);
   }, [location.key]);

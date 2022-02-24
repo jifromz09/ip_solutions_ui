@@ -1,4 +1,7 @@
- 
+body,
+html {
+  width: 100%;
+}
 .Wrapper {
   position: absolute;
   top: 0;
@@ -12,14 +15,14 @@
   height: 100%;
 }
 
-.table>tbody {
-  border-top: none!important;
+.table > tbody {
+  border-top: none !important;
 }
 
 .navbar {
   padding: 0rem !important;
   padding-bottom: 0rem !important;
-  background-color: #00b8d4 !important;
+  background-color: #0097a7;
   width: 100%;
 }
 
@@ -51,33 +54,57 @@
 .form-group {
   padding: 5px 0px;
 }
-
-
-.btn-secondary {
-  width: 4.5rem;
+.form.control {
+  font-size: 0.9rem;
 }
 
-.btn-primary{
-  width: 3rem!important;
+.table > :not(:first-child) {
+  border-top: none !important;
 }
 
- .pagination {
-  flex-direction: row!important;
- }
+h3.notFound {
+  margin-bottom: 0px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background-color: #0097a7 !important;
+  border-color: #0097a7 !important;
+}
+
+.pagination {
+  flex-direction: row !important;
+}
 
 .btn-edit,
 .btn-add {
   background-color: #0097a7;
 }
 
- .subHeader {
-   letter-spacing: 1px;
-   font-size: 25px;
-   color: #0097a7;
-   text-align: center;
- }
+.table > thead {
+  background-color: #0097a7;
+  color: #fff;
+}
 
- 
+.page-item.active .page-link {
+  z-index: 3;
+  color: #fff;
+  background-color: #0097a7;
+  border-color: #0097a7;
+}
+
+th {
+  font-weight: 500;
+}
+
+.subHeader {
+  letter-spacing: 1px;
+  font-size: 25px;
+  color: #0097a7;
+  text-align: center;
+}
+
 .btn-logs {
   background-color: #c62828;
 }
@@ -86,10 +113,6 @@
   border-left-color: #00b8d4;
   border-top-color: #00b8d4;
   border-bottom-color: #00b8d4;
-}
-
-.btn {
-  color: #fff;
 }
 
 .ml {
@@ -189,8 +212,8 @@ h1 {
   }
 }
 
-@media (max-width: 400px) {  
+@media (max-width: 400px) {
   .table-responsive {
-      font-size:10px !important;
+    font-size: 10px !important;
   }
 }

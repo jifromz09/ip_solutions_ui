@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./_base/Button";
 import TextInput from "./_base/TextInput";
-import Layout from "./Layout/Layout";
+ 
 import storage from "../config";
 import Cookies from "js-cookie";
 import { hideErrorAlert, authSuccessTimeeOut } from "../Helpers";
@@ -19,8 +19,8 @@ const LOADER_CAPTION = "Logging in....";
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("jifford.romasanta01@outlook.com");
+  const [password, setPassword] = useState("jifromz1988");
   const [showErrorAlert, setShowErrorAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(EMAIL_REQUIRED);
   const [alertClassName, setAlertClassName] = useState("alert-danger");

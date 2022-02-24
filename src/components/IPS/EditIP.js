@@ -65,10 +65,10 @@ const EditIP = () => {
         // });
 
         if (!isMounted.current) return;
-      
+
         setResponseResult(message, "alert-success");
       })
-      .catch((err) => {      
+      .catch((err) => {
         const { message } = err.response.data;
         setResponseResult(message, "alert-danger");
       });
@@ -76,8 +76,8 @@ const EditIP = () => {
 
   return (
     <div className="row g-0">
-      <div className="col p-4">
-        <div className="input-group mb-3">
+      <div className="col-sm-12 col-md-8 col-lg-6 p-4">
+        <div className="input-group input-group-sm mb-2">
           <TextInput
             className={`form-control`}
             value={ip_address}
@@ -85,7 +85,7 @@ const EditIP = () => {
             disabled={true}
           />
         </div>
-        <div className="input-group mb-3">
+        <div className="input-group input-group-sm mb-3">
           <TextInput
             className={`form-control`}
             value={currLabel}
@@ -93,22 +93,24 @@ const EditIP = () => {
             ph={`Label`}
           />
         </div>
-        <Button
-          disabled={loading}
-          className={`btn btn-sm btn-edit`}
-          cb={() => {
-            onUpdate();
-          }}
-          text={loading ? "Updating..." : "Update"}
-        />
-        <Button
-          disabled={loading}
-          className={`btn btn-secondary ms-2 btn-sm`}
-          cb={() => {
-            navigate(ADDRESSES);
-          }}
-          text={`Back`}
-        />
+        <div className="d-grid gap-2 d-md-block">
+          <Button
+            disabled={loading}
+            className={`btn-primary btn-sm`}
+            cb={() => {
+              onUpdate();
+            }}
+            text={"Update"}
+          />
+          <Button
+            disabled={loading}
+            className={`btn-secondary btn-sm`}
+            cb={() => {
+              navigate(ADDRESSES);
+            }}
+            text={`Back to list`}
+          />
+        </div>
         <Alert
           message={alertMessage}
           showErrorAlert={showErrorAlert}

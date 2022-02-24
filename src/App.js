@@ -26,8 +26,7 @@ import AuditTrails from "./components/User/AuditTrails";
 
 const App = () => {
   return (
-    <>
-    
+    <>    
       <Routes>
         <Route path={LOGIN} element={<Login />} />
         <Route path={ADDRESSES} element={<Main />}>
