@@ -14,7 +14,7 @@ import {
 } from "../src/constants/RouteConstants";
 
 import LoginPage from "./components/Login/LoginPage";
-import Register from "./components/Register";
+import RegistrationPage from "./components/Register/RegistrationPage";
 import EditIP from "./components/IPS/EditIP";
 import IPListPage from "./components/IPS/IPListPage";
 import Main from "./components/Main";
@@ -41,7 +41,7 @@ const App = () => {
 
         <Route path={USER_ACTIVITY_LOGS} element={<UserLogs />} />
         <Route path={USER_AUDIT_TRAILS} element={<AuditTrails />} />
-        <Route path={REGISTER} element={<Register />} />
+        <Route path={REGISTER} element={<RegistrationPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </ContextWrapper>

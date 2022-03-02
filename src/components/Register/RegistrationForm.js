@@ -1,17 +1,31 @@
 import React from "react";
-import { REGISTER } from "../../constants/RouteConstants";
 import { useNavigate } from "react-router-dom";
 import Button from "../_base/Button";
 import TextInputGroup from "../_base/TextInputGroup";
- 
-const LoginForm = ({ userCreds, onTextChange, userLogin, fetching, errors }) => {
-  
-  const { email, password } = userCreds;
+import { LOGIN } from "../../constants/RouteConstants";
+
+
+const RegistrationForm = ({
+  userDetails,
+  onTextChange,
+  registerUser,
+  fetching,
+  errors,
+}) => {
+  const { email, password_confirmation, name, password } = userDetails;
 
   const navigate = useNavigate();
 
   return (
     <form>
+      <TextInputGroup
+        type="text"
+        value={name}
+        onTextChange={onTextChange}
+        placeholder={`Name`}
+        name={`name`}
+        errors={errors}
+      />
       <TextInputGroup
         type="email"
         value={email}
@@ -28,17 +42,25 @@ const LoginForm = ({ userCreds, onTextChange, userLogin, fetching, errors }) => 
         name={`password`}
         errors={errors}
       />
+      <TextInputGroup
+        type="password"
+        value={password_confirmation}
+        onTextChange={onTextChange}
+        placeholder={`Confirm password`}
+        name={`password_confirmation`}
+        errors={errors}
+      />
       <div className="pt-1 mb-4">
         <Button
           className={`btn btn-primary btn-sm btn-block`}
-          text={`Login`}
-          cb={userLogin}
+          text={`Register`}
+          cb={() => registerUser()}
           disabled={fetching}
         />
         <Button
           className={`btn btn-primary btn-sm btn-block ml`}
-          text={`Register`}
-          cb={() => navigate(REGISTER)}
+          text={`Back to login`}
+          cb={() => navigate(LOGIN)}
           disabled={fetching}
         />
       </div>
@@ -46,4 +68,4 @@ const LoginForm = ({ userCreds, onTextChange, userLogin, fetching, errors }) => 
   );
 };
 
-export default LoginForm;
+export default RegistrationForm;

@@ -1,27 +1,37 @@
-import React from "react";
-import LoginForm from "./LoginForm";
-
-import { ADDRESSES } from "../../constants/RouteConstants";
+import React, { useState, useEffect, useContext } from "react";
 import Layout from "../Layout/Layout";
-import { AppContext } from "../../appcontext";
-import Alert from "../_base/Alert";
-import { useNavigate } from "react-router-dom";
+import isEmpty from "lodash/isEmpty";
+
+import { register } from "../../data/api";
 import useSessionStorage from "../../customHooks/useSessionStorage";
-import { useEffect, useState, useContext } from "react";
+
+import Alert from "../_base/Alert";
+import { AppContext } from "../../appcontext";
+
+import RegistrationForm from "./RegistrationForm";
 import { ALERT_DANGER, ALERT_SUCCESSS } from "../../constants/AlertMessages";
-import { login } from "../../data/api";
 import { setAlertErrorConfig, hideErrorAlert } from "../../Helpers";
 
-const LoginPage = () => {
+import { ADDRESSES } from "../../constants/RouteConstants";
+import { useNavigate } from "react-router-dom";
+
+const RegistrationPage = () => {
   const { fetching, setFetching, setAlertConfig, alertConfig } =
     useContext(AppContext);
 
-  const [userCreds, setUserCreds] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
-
   const navigate = useNavigate();
+
+  const [userDetails, setUserDetails] = useState({
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
+  });
+
   const userStorage = useSessionStorage();
   const tokenStorage = useSessionStorage();
+
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     return () => {
@@ -32,18 +42,34 @@ const LoginPage = () => {
   const onTextChange = (e) => {
     const { value, name } = e.target;
 
-    setUserCreds((prevState) => {
+    setUserDetails((prevState) => {
       return { ...prevState, [name]: value };
     });
   };
 
-  const userLogin = async () => {
+  const registerUser = async () => {
+    if (
+      userDetails.password &&
+      userDetails.password_confirmation &&
+      userDetails.password !== userDetails.password_confirmation
+    ) {
+      setAlertErrorConfig(
+        {
+          message: "Password did not match.",
+          show: true,
+          classname: ALERT_DANGER,
+        },
+        setAlertConfig
+      );
+      return;
+    }
+
     setErrors((prevState) => (prevState = {}));
     setFetching((prevState) => !prevState);
 
-    const { email, password } = userCreds;
+    const { name, email, password, password_confirmation } = userDetails;
 
-    await login({ email, password })
+    await register({ email, password, password_confirmation, name })
       .then((res) => {
         const { status, data } = res;
         if (status === 200) {
@@ -51,18 +77,21 @@ const LoginPage = () => {
           userStorage.setData("name", name);
           tokenStorage.setData("token", access_token);
           setFetching((prevState) => (prevState = false));
-          setAlertErrorConfig({
-            message: message,
-            show: true,
-            classname: ALERT_SUCCESSS,
-          });
+          setAlertErrorConfig(
+            {
+              message: message,
+              show: true,
+              classname: ALERT_SUCCESSS,
+            },
+            setAlertConfig
+          );
           navigate(ADDRESSES);
         }
       })
       .catch((err) => {
         const { data, status } = err.response;
         setFetching((prevState) => (prevState = false));
-        
+
         if (status === 422) {
           setErrors((prevState) => (prevState = { ...data?.errors }));
         }
@@ -89,12 +118,12 @@ const LoginPage = () => {
         justify-content-center row`}
       >
         <div className="col-md-5">
-          <h1 className="fw-normal">Log in</h1>
+          <h1 className="fw-normal">Register</h1>
           <Alert {...alertConfig} />
-          <LoginForm
+          <RegistrationForm
             onTextChange={onTextChange}
-            userCreds={userCreds}
-            userLogin={userLogin}
+            userDetails={userDetails}
+            registerUser={registerUser}
             fetching={fetching}
             errors={errors}
           />
@@ -104,4 +133,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default RegistrationPage;
