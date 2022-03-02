@@ -1,10 +1,11 @@
 import React from "react";
 
-const Alert = ({ message, className, showErrorAlert }) => {
+const Alert = ({ message, classname, show }) => {
   return (
     <div
-      className={`mt-3 alert ${className} fade ${
-        showErrorAlert ? "show" : "hide"
+      className={`alert
+      ${classname} fade ${
+        show ? "show" : "hide"
       }`}
       role="alert"
     >

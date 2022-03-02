@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "./_base/Button";
-import TextInput from "./_base/TextInput";
+import TextInput from "./_base/TextInputGroup";
 import Layout from "./Layout/Layout";
 import storage from "../config";
 import Cookies from "js-cookie";
-import { hideErrorAlert, authSuccessTimeeOut } from "../Helpers";
+import { hideErrorAlert } from "../Helpers";
 import { register, authHeader } from "../data/api";
 import { ADDRESSES, LOGIN } from "../constants/RouteConstants";
 import axios from "axios";
@@ -32,7 +32,7 @@ const Register = () => {
   useEffect(() => {
     return () => {
       clearTimeout(hideErrorAlert);
-      clearTimeout(authSuccessTimeeOut);
+    
     };
   }, []);
 
@@ -95,7 +95,7 @@ const Register = () => {
         Cookies.set("token", access_token);
         axios.defaults.headers = authHeader();
         setLoading((prevState) => !prevState);
-        authSuccessTimeeOut(navigate, ADDRESSES);
+    
       })
       .catch((err) => {
         console.log(err.response);

@@ -21,7 +21,7 @@ const NavBar = () => {
   useEffect(() => {
     return () => {
       clearTimeout(hideErrorAlert);
-      clearTimeout(authSuccessTimeeOut);
+      
     };
   }, []);
 
@@ -31,7 +31,7 @@ const NavBar = () => {
         // const { message } = res.data;
         storage.clear();
         Cookies.remove("token");
-        authSuccessTimeeOut(navigate, LOGIN);
+        // authSuccessTimeeOut(navigate, LOGIN);
       })
       .catch((err) => {
         console.log(err.response);

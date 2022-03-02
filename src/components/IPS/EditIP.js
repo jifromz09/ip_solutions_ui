@@ -1,30 +1,34 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import Button from "../_base/Button";
-import { useLocation, useNavigate } from "react-router-dom";
-import { ADDRESSES } from "../../constants/RouteConstants";
-import TextInput from "../_base/TextInput";
-import { hideErrorAlert } from "../../Helpers";
+import { useLocation } from "react-router-dom";
 import { updateIPLabel } from "../../data/api";
 import Alert from "../_base/Alert";
-import { AppContext } from "../Main";
-import { LABEL_REQUIRED } from "../../constants/AlertMessages";
+import { AppContext } from "../../appcontext";
+import { setAlertErrorConfig, hideErrorAlert } from "../../Helpers";
+import { ALERT_SUCCESSS } from "../../constants/AlertMessages";
+import IPInputForm from "./IPInputForm";
+ 
+const input_errors = (field, message) => {
+  return {
+    [field]: [message],
+    message: message,
+  };
+};
 
 const EditIP = () => {
   const {
-    showErrorAlert,
-    setShowErrorAlert,
-    alertMessage,
-    setAlertMessage,
-    setAlertClassName,
-    alertClassName,
-    loading,
-    setLoading,
-    setResponseResult,
-  } = useContext(AppContext);
-  const navigate = useNavigate();
-  const { state } = useLocation();
-  const { label, id, ip_address } = state;
-  const [currLabel, setLabel] = useState(label);
+    state: { label, ip_address, id },
+  } = useLocation();
+
+  const { fetching, setFetching, setAlertConfig, alertConfig } =
+    useContext(AppContext);
+
+  const [ipFieldData, setIPFieldData] = useState({
+    ip_address: ip_address,
+    label: label,
+    id: id,
+  });
+
+  const [errors, setErrors] = useState({});
 
   const isMounted = useRef(false);
 
@@ -36,86 +40,64 @@ const EditIP = () => {
     };
   }, []);
 
-  const onLabelChange = (e) => {
-    const { value } = e.target;
-    setLabel((prevState) => (prevState = value));
-  };
+  const onTextChange = (e) => {
+    const { value, name } = e.target;
 
-  const onUpdate = () => {
-    if (!currLabel) {
-      setShowErrorAlert((prevState) => (prevState = true));
-      setAlertClassName((prevState) => (prevState = "alert-danger"));
-      setAlertMessage((prevState) => (prevState = LABEL_REQUIRED));
-      hideErrorAlert(setShowErrorAlert);
-      return;
-    }
-
-    updateLabel();
+    setIPFieldData((prevState) => {
+      return { ...prevState, [name]: value };
+    });
   };
 
   const updateLabel = async () => {
-    setLoading((prevState) => !prevState);
-    await updateIPLabel(currLabel, id)
-      .then((res) => {
-        const { message, data } = res.data;
+    if (!ipFieldData.label) {
+      setErrors(
+        (prevState) =>
+          (prevState = input_errors("label", "IP address label is required."))
+      );
+      return;
+    }
 
-        // let newArr = ipAdds;
-        // newArr.data.map((ip) => {
-        //   return ip.id === data.id ? { ...ip, label: data.label } : { ...ip };
-        // });
+    setFetching((prevState) => (prevState = true));
+    await updateIPLabel(ipFieldData.label, id)
+      .then((result) => {
+        const { status, data } = result;
 
         if (!isMounted.current) return;
+        setFetching((prevState) => (prevState = false));
+        setErrors({});
 
-        setResponseResult(message, "alert-success");
+        if (status === 200) {
+          const { message } = data;
+          setAlertErrorConfig(
+            {
+              message: message,
+              show: true,
+              classname: ALERT_SUCCESSS,
+            },
+            setAlertConfig
+          );
+        }
       })
       .catch((err) => {
-        const { message } = err.response.data;
-        setResponseResult(message, "alert-danger");
+        const { data, status } = err.response;
+        if (status === 422) {
+          setErrors((prevState) => (prevState = { ...data?.errors }));
+        }
+        setFetching((prevState) => (prevState = false));
       });
   };
 
   return (
     <div className="row g-0">
       <div className="col-sm-12 col-md-8 col-lg-6 p-4">
-        <div className="input-group input-group-sm mb-2">
-          <TextInput
-            className={`form-control`}
-            value={ip_address}
-            ph={`IP Address`}
-            disabled={true}
-          />
-        </div>
-        <div className="input-group input-group-sm mb-3">
-          <TextInput
-            className={`form-control`}
-            value={currLabel}
-            cb={onLabelChange}
-            ph={`Label`}
-          />
-        </div>
-        <div className="d-grid gap-2 d-md-block">
-          <Button
-            disabled={loading}
-            className={`btn-primary btn-sm`}
-            cb={() => {
-              onUpdate();
-            }}
-            text={"Update"}
-          />
-          <Button
-            disabled={loading}
-            className={`btn-secondary btn-sm`}
-            cb={() => {
-              navigate(ADDRESSES);
-            }}
-            text={`Back to list`}
-          />
-        </div>
-        <Alert
-          message={alertMessage}
-          showErrorAlert={showErrorAlert}
-          className={alertClassName}
+        <IPInputForm
+          onTextChange={onTextChange}
+          onSave={updateLabel}
+          fetching={fetching}
+          ipFieldData={ipFieldData}
+          errors={errors}
         />
+        <Alert {...alertConfig} />
       </div>
     </div>
   );

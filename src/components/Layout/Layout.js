@@ -1,10 +1,10 @@
 import React from "react";
-import NavBar from "../_base/NavBar";
-import storage from "../../config";
-
+import NavBar from "./NavBar";
+ 
 const Layout = ({ children }) => {
+   
   return (
-    <div className="Wrapper overflow-scroll">
+    <div className="wrapper">
       <div className="container">
         <NavBar />
         {children}
