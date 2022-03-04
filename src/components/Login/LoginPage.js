@@ -62,7 +62,7 @@ const LoginPage = () => {
       .catch((err) => {
         const { data, status } = err.response;
         setFetching((prevState) => (prevState = false));
-        
+
         if (status === 422) {
           setErrors((prevState) => (prevState = { ...data?.errors }));
         }

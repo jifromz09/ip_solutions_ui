@@ -1,22 +1,22 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import "../../App.css";
 import { formatDate } from "../../Helpers";
 import { userAuditTrailTableHeader } from "../../data/static/tableHeader";
 import Pagination from "../_base/Pagination";
 import Table from "../../components/_base/Table/Table";
- 
+
 import Layout from "../Layout/Layout";
 import Loader from "../_base/Loader";
 import { LOADER_CAPTION } from "../../constants/Constants";
 import storage from "../../config";
 
-import isEmpty from 'lodash/isEmpty';
+import isEmpty from "lodash/isEmpty";
 import NoDataFound from "../_base/Table/NoDataFound";
 
 import { getUserAuditTrails } from "../../data/api";
 
-import {Link} from "react-router-dom";
-import {ADDRESSES}from "../../constants/RouteConstants";
+import { Link } from "react-router-dom";
+import { ADDRESSES } from "../../constants/RouteConstants";
 
 const AuditTrails = () => {
   const isMounted = useRef(false);
@@ -71,14 +71,13 @@ const AuditTrails = () => {
     });
   };
 
+  const itemStyle = useMemo(() => {
+    return loading ? "align-items-center" : "align-items-start";
+  }, [loading]);
+
   return (
     <Layout isLoggedIn={isLoggedIn}>
-      <div
-        className={`row px-2 justify-content-center ${
-          loading ? "align-items-center" : "align-items-start"
-        } h-100`}
-      >     
-
+      <div className={`row px-2 justify-content-center ${itemStyle} h-100`}>
         {loading && <Loader caption={LOADER_CAPTION} show={true} />}
 
         {!loading && (
@@ -101,10 +100,7 @@ const AuditTrails = () => {
                   </Link>
                 </div>
                 <div className="col">
-                  <Pagination                  
-                    pageData={audits}
-                    cb={audits}
-                  />
+                  <Pagination pageData={audits} cb={audits} />
                 </div>
               </div>
             )}

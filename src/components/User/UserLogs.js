@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useMemo } from "react";
 import "../../App.css";
 import { formatDate } from "../../Helpers";
 import { userLogsTableHeader } from "../../data/static/tableHeader";
@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import isEmpty from "lodash/isEmpty";
 
 import { getUserLogs } from "../../data/api";
-import {ADDRESSES} from "../../constants/RouteConstants";
+import { ADDRESSES } from "../../constants/RouteConstants";
 
 const UserLogs = () => {
   const isMounted = useRef(false);
@@ -63,15 +63,14 @@ const UserLogs = () => {
     });
   };
 
+  const itemStyle = useMemo(() => {
+    return loading ? "align-items-center" : "align-items-start";
+  }, [loading]);
+
   return (
     <Layout isLoggedIn={isLoggedIn}>
-      <div
-        className={`row px-2 justify-content-center ${
-          loading ? "align-items-center" : "align-items-start"
-        } h-100`}
-      >
+      <div className={`row px-2 justify-content-center ${itemStyle} h-100`}>
         <div className="col">
-
           {loading && <Loader caption={LOADER_CAPTION} show={true} />}
 
           {!loading && (
@@ -90,14 +89,11 @@ const UserLogs = () => {
                       className="btn btn-secondary ms-2 btn-sm"
                       to={ADDRESSES}
                     >
-                       Back to list
+                      Back to list
                     </Link>
                   </div>
                   <div className="col">
-                    <Pagination                     
-                      pageData={logs}
-                      cb={fetchUserLogs}
-                    />
+                    <Pagination pageData={logs} cb={fetchUserLogs} />
                   </div>
                 </div>
               )}

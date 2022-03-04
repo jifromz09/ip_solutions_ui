@@ -4,7 +4,6 @@ import Button from "../_base/Button";
 import TextInputGroup from "../_base/TextInputGroup";
 import { LOGIN } from "../../constants/RouteConstants";
 
-
 const RegistrationForm = ({
   userDetails,
   onTextChange,

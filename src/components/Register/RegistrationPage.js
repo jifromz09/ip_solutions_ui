@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import Layout from "../Layout/Layout";
-import isEmpty from "lodash/isEmpty";
 
 import { register } from "../../data/api";
 import useSessionStorage from "../../customHooks/useSessionStorage";
