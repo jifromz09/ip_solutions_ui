@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useLocalStorage() {
+export default function useSessionStorage() {
   
   const getData = (key) => {
     const dataString = sessionStorage.getItem(key);
@@ -9,19 +9,24 @@ export default function useLocalStorage() {
   };
 
   const [userData, setUserData] = useState(getData("name"));
-  const [tokenData, setTokenData] = useState(getData("token"));
+  const [tokenData, setTokenData] = useState(getData("access_token"));
  
   const saveData = (key, value) => {
-    console.log(JSON.stringify(value))
-    sessionStorage.setItem(key, JSON.stringify(value));
+    console.log(value);
+    sessionStorage.setItem(key, value);
 
     key === "name" ? setUserData((prevData) => (prevData = value)) :
     setTokenData((prevData) => (prevData = value));
   };
 
+  const clearCredentials = () => {
+    sessionStorage.clear();
+  }
+
   return {
     setData: saveData,
     userData,
-    tokenData
+    tokenData,
+    clearCredentials: clearCredentials
   };
 }

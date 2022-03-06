@@ -47,19 +47,25 @@ const LoginPage = () => {
       .then((res) => {
         const { status, data } = res;
         if (status === 200) {
-          const { message, name, access_token } = data;
+          const { name, access_token } = data.data;
+
+          console.log(data)
+
           userStorage.setData("name", name);
-          tokenStorage.setData("token", access_token);
+          tokenStorage.setData("access_token", access_token);
           setFetching((prevState) => (prevState = false));
           setAlertErrorConfig({
-            message: message,
+            message: data.message,
             show: true,
             classname: ALERT_SUCCESSS,
-          });
+          }, setAlertConfig);
           navigate(ADDRESSES);
         }
       })
       .catch((err) => {
+
+        console.log(err)
+
         const { data, status } = err.response;
         setFetching((prevState) => (prevState = false));
 

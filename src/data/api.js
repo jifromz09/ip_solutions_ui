@@ -77,14 +77,14 @@ export const logout = async () => {
 };
 
 export const authHeader = () => {
-  // let user = JSON.parse(localStorage.getItem('user'));
-  let token = JSON.parse(localStorage.getItem("access_token"));
-
-  if (token) {
+  
+  let tokenData = sessionStorage.getItem('access_token');
+ 
+  if (tokenData) {
     return {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + tokenData,
     };
   } else {
     return {
