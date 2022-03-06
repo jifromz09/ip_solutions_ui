@@ -48,9 +48,6 @@ const LoginPage = () => {
         const { status, data } = res;
         if (status === 200) {
           const { name, access_token } = data.data;
-
-          console.log(data)
-
           userStorage.setData("name", name);
           tokenStorage.setData("access_token", access_token);
           setFetching((prevState) => (prevState = false));
